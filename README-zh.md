@@ -1,10 +1,10 @@
-# CAST Edu Board 2023
+# CAST Edu Board 2024
 Choose your language: 
 - [English](./README.md)
 - [简体中文](./README-zh.md)
 
 ## 简介
-CAST Edu Board 2023 由通院科协（CAST）专为内部教育用途设计。演示程序使用 C++ 开发，使用 HAL 库驱动，位于 `mcu/` 目录中。
+CAST Edu Board 2024 由通院科协（CAST）专为内部教育用途设计。演示程序使用 C++ 开发，使用 HAL 库驱动，位于 `mcu/` 目录中。
 
 注意：虽然演示程序和电路原理图是开源的，可以在此仓库中找到，但**PCB设计不是开源的**。
 
@@ -22,7 +22,7 @@ CAST Edu Board 2023 由通院科协（CAST）专为内部教育用途设计。�
 ### 特性
 - 所有引脚都已连接至排座
 - 128x64 OLED 单色显示器
-- 红外传输器和接收器
+- 激光测距模块
 - 4x4 矩阵键盘
 - 2 个独立按键
 - 旋转编码器
@@ -33,7 +33,7 @@ CAST Edu Board 2023 由通院科协（CAST）专为内部教育用途设计。�
 
 ### 版权
 ```
-Copyright (C) 2023 ArcticLampyrid <alampy.com>
+Copyright (C) 2024 ArcticLampyrid <alampy.com>, insmtr <insmtr@insmtr.cn>
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as
 published by the Free Software Foundation, either version 3 of the
@@ -53,8 +53,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 - 使用蜂鸣器播放音调。
 - 带呼吸效果的 RGB LED 灯。
 - 键盘功能测试模块。
-- 红外传输器和接收器测试模块。
-- 一个趣味游戏：贪吃蛇。
+- 激光测距模块。
+- 趣味游戏：贪吃蛇、恐龙快跑。
 
 ### 编译 & 烧写
 1. 安装 ARM Embedded GCC 工具链 (`arm-none-eabi-gcc`) 和 CMake。
@@ -73,7 +73,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 5. 使用 OpenOCD 烧写：
    ```bash
    cd mcu
-   openocd -f interface/cmsis-dap.cfg -f target/stm32f4x.cfg -c "init" -c "halt" -c "stm32f4x unlock 0" -c "reset halt" -c "flash write_image erase build/cast_edu_board_2023.elf" -c "reset" -c "shutdown"
+   openocd -f interface/cmsis-dap.cfg -f target/stm32f4x.cfg -c "init" -c "halt" -c "stm32f4x unlock 0" -c "reset halt" -c "flash write_image erase build/cast_edu_board_2024.elf" -c "reset" -c "shutdown"
    ```
    注意：`interface/cmsis-dap.cfg` 表示 CMSIS-DAP 烧录器。如有需要，请用您特定的接口配置替换。
 
@@ -92,6 +92,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 **（注意：这不是法律建议。应以 [LICENSE](LICENSE.md) 文件为准。）**
 
 ## 作者
-- 固件开发：[ArcticLampyrid](https://alampy.com/)
-- 固件测试：[ArcticLampyrid](https://alampy.com/), Shujian Yu
-- 硬件设计：Cancer⭐Bocchi, Fei Zhao, Qiuyang Xu
+- 固件开发：[ArcticLampyrid](https://alampy.com/), [insmtr](blog.insmtr.cn)
+- 固件测试：[ArcticLampyrid](https://alampy.com/), [insmtr](blog.insmtr.cn)
+- 硬件设计：Mian Wang
