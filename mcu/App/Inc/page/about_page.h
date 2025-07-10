@@ -13,8 +13,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
-#include "damp_animation.h"
+#include "ease_out_quint_animation.h"
 #include "page.h"
+
 class about_page : public page
 {
   public:
@@ -25,7 +26,9 @@ class about_page : public page
     void on_encoder_changed(int32_t diff) override;
 
   private:
-    damp_animation top_y{0};
+    ease_out_quint_animation top_y{0};
     uint16_t last_y = UINT16_MAX;
+    void scroll_to_top();
 };
+
 extern about_page about_page_instance;

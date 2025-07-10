@@ -14,6 +14,7 @@
 
 #include "animation.h"
 #include "stm32f4xx_hal.h"
+
 void animation::update()
 {
     if (done)
@@ -65,10 +66,12 @@ void animation::transition(float end_value, uint32_t duration_tick)
     this->start_tick = HAL_GetTick();
     done = false;
 }
+
 float animation::end_value() const
 {
     return start_value + value_span;
 }
+
 bool animation::is_done() const
 {
     return done;

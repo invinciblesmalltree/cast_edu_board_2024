@@ -26,7 +26,7 @@ void menu_page::update_ui()
     shadow_bottom.update();
     shadow_width.update();
 
-    u8g2_SetFont(&screen, u8g2_font_6x12_tf);
+    u8g2_SetFont(&screen, u8g2_font_wqy12_t_gb2312_lite);
     u8g2_ClearBuffer(&screen);
 
     // Draw header
@@ -42,8 +42,8 @@ void menu_page::update_ui()
     for (size_t i = std::floor(top_index_value); i < item_count; i++)
     {
         item_bottom += item_height;
-        u8g2_DrawLine(&screen, 2, item_bottom - item_height / 2, 4, item_bottom - item_height / 2);
-        u8g2_DrawUTF8(&screen, 10, item_bottom - 1, items[i].text);
+        u8g2_DrawLine(&screen, 2, item_bottom - item_height / 2 - 1, 4, item_bottom - item_height / 2 - 1);
+        u8g2_DrawUTF8(&screen, 10, item_bottom - 2, items[i].text);
     }
 
     u8g2_SetDrawColor(&screen, 2);
@@ -75,23 +75,27 @@ void menu_page::leave()
 {
 }
 
-menu_page::menu_page(const char *title, menu_item *items, size_t item_count)
+menu_page::menu_page(const char *title, menu_item *items, size_t item_count, page *parent)
     : title(title), items(items), item_count(item_count)
 {
-    u8g2_SetFont(&screen, u8g2_font_6x12_tf);
+    u8g2_SetFont(&screen, u8g2_font_wqy12_t_gb2312_lite);
     this->font_height = screen.font_info.max_char_height + screen.font_info.y_offset;
     for (int i = 0; i < item_count; ++i)
     {
         items[i].width = u8g2_GetUTF8Width(&screen, items[i].text);
     }
     this->header_height = font_height;
-    this->item_height = font_height;
+    this->item_height = font_height + 2;
     this->item_lines = static_cast<float>(screen_height - header_height) / (float)item_height;
 
     this->key_handlers[KEY_OK].on_pressed = [this](key_state) { this->enter_menu_item(); };
-    this->key_handlers[KEY_R3C2].on_pressed = [this](key_state) { this->focus_with_increment(-1); };
-    this->key_handlers[KEY_R4C2].on_pressed = [this](key_state) { this->focus_with_increment(1); };
-    this->key_handlers[KEY_R4C3].on_pressed = [this](key_state) { this->enter_menu_item(); };
+    this->key_handlers[KEY_X1Y1].on_pressed = [this](key_state) { this->focus_with_increment(-1); };
+    this->key_handlers[KEY_X1Y0].on_pressed = [this](key_state) { this->focus_with_increment(1); };
+    this->key_handlers[KEY_X2Y0].on_pressed = [this](key_state) { this->enter_menu_item(); };
+    if (parent)
+    {
+        this->key_handlers[KEY_X0Y0].on_pressed = [parent](key_state) { route_to(parent); };
+    }
 
     top_index.set(0);
     shadow_top.set(header_height);
@@ -129,9 +133,26 @@ void menu_page::focus_to(size_t target_index)
     current = target_index;
 }
 
+void menu_page::focus_to_without_transition(size_t target_index)
+{
+    if (!item_count)
+        return;
+    if (target_index >= item_count)
+    {
+        target_index = item_count - 1;
+    }
+    auto top_value = float(header_height) + float(target_index) * float(item_height);
+    auto bottom_value = top_value + float(item_height);
+    shadow_top.set(top_value);
+    shadow_bottom.set(bottom_value);
+    shadow_width.set((float)items[target_index].width + 14);
+    ensure_visible(target_index, false);
+    current = target_index;
+}
+
 void menu_page::focus_with_increment(int increment)
 {
-    if (increment < 0 && current < (-increment))
+    if (increment < 0 && current < -increment)
         return focus_to(0);
     ;
     if (current + increment >= item_count)
@@ -139,7 +160,7 @@ void menu_page::focus_with_increment(int increment)
     return focus_to(current + increment);
 }
 
-void menu_page::ensure_visible(size_t target_index)
+void menu_page::ensure_visible(size_t target_index, bool transition)
 {
     if (!item_count)
         return;
@@ -152,14 +173,14 @@ void menu_page::ensure_visible(size_t target_index)
     auto i_target = (float)target_index;
     if (i_top <= i_target && i_target <= i_bottom - 1)
         return;
-    if (i_top > i_target)
+    if (i_top <= i_target)
     {
+        i_target = i_target - item_lines + 1;
+    }
+    if (transition)
         this->top_index.transition(i_target, 200);
-    }
     else
-    {
-        this->top_index.transition(i_target - item_lines + 1, 200);
-    }
+        this->top_index.set(i_target);
 }
 
 void menu_page::on_encoder_changed(int32_t diff)

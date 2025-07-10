@@ -25,7 +25,7 @@ class encoder_reader_t
     uint16_t pin_a;
     GPIO_TypeDef *pin_b_port;
     uint16_t pin_b;
-    uint16_t state = 0;
+    uint16_t state = 3;
     encoder_direction_t direction = encoder_direction_t::CW;
 
   public:

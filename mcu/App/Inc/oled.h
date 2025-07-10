@@ -14,6 +14,7 @@
 
 #pragma once
 #include "u8g2.h"
+#include "my_fonts.h"
 #ifdef __cplusplus
 extern "C"
 {

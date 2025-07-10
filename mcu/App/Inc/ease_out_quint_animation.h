@@ -13,11 +13,13 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
-#include <cstddef>
-#include <cstdint>
-// The gif is download from https://blog.csdn.net/qq_37973192/article/details/125701279
-// Contact me if there are any copyright issues.
-const constexpr size_t gif_length = 33;
-const constexpr uint16_t gif_width = 64;
-const constexpr uint16_t gif_height = 64;
-extern const unsigned char gif[gif_length][512];
+#include "animation.h"
+
+class ease_out_quint_animation : public animation
+{
+  public:
+    explicit ease_out_quint_animation(float init_value);
+
+  protected:
+    float map(float t) override;
+};

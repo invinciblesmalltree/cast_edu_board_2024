@@ -47,8 +47,8 @@ void buzzer_enable()
 {
     __disable_irq();
     buzzer_state.enabled = true;
-    __HAL_TIM_SET_AUTORELOAD(&htim1, 100 - 1);
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
+    __HAL_TIM_SET_AUTORELOAD(&htim3, 100 - 1);
+    HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
     __enable_irq();
 }
 
@@ -56,8 +56,8 @@ void buzzer_disable()
 {
     __disable_irq();
     buzzer_state.enabled = false;
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 0);
-    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_4);
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 0);
+    HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_1);
     __enable_irq();
 }
 
@@ -80,19 +80,19 @@ void buzzer_tick_1ms()
     {
         buzzer_state.tones = nullptr;
         buzzer_state.count = 0;
-        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 0);
+        __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 0);
         return;
     }
     auto &tone = buzzer_state.tones[buzzer_state.index];
     buzzer_state.duration = tone.duration;
     if (tone.freq == 0)
     {
-        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 0);
+        __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 0);
     }
     else
     {
-        __HAL_TIM_SET_PRESCALER(&htim1, std::round(840000.f / tone.freq) - 1);
-        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 25); // 25% duty cycle
+        __HAL_TIM_SET_PRESCALER(&htim3, std::round(840000.f / tone.freq) - 1);
+        __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 25); // 25% duty cycle
     }
 }
 
@@ -108,7 +108,7 @@ void buzzer_start_play(const tone_info *tones, uint32_t count)
     buzzer_state.count = count;
     buzzer_state.index = static_cast<uint32_t>(-1);
     buzzer_state.duration = 1;
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 0);
+    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, 0);
     __enable_irq();
 }
 

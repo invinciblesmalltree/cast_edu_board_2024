@@ -13,10 +13,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <encoder_reader.h>
+
 encoder_reader_t::encoder_reader_t(GPIO_TypeDef *pinAPort, uint16_t pinA, GPIO_TypeDef *pinBPort, uint16_t pinB)
     : pin_a_port(pinAPort), pin_a(pinA), pin_b_port(pinBPort), pin_b(pinB)
 {
 }
+
 void encoder_reader_t::handle_a()
 {
     // Reference
@@ -78,6 +80,7 @@ void encoder_reader_t::handle_a()
     }
     this->state = new_state;
 }
+
 void encoder_reader_t::handle_b()
 {
     handle_a();

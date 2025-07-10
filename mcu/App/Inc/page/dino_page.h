@@ -1,4 +1,4 @@
-// Copyright (C) 2023 ArcticLampyrid <alampy.com>
+// Copyright (C) 2024 ArcticLampyrid <alampy.com>
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
 // published by the Free Software Foundation, either version 3 of the
@@ -12,13 +12,27 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#pragma once
-#include "animation.h"
-class damp_animation : public animation
-{
-  public:
-    explicit damp_animation(float init_value);
+//
+// Created by insmtr on 24-9-16.
+//
 
-  protected:
-    float map(float t) override;
+#pragma once
+#include "dino_logic.h"
+#include "page.h"
+
+class dino_page : public page
+{
+  private:
+    dino::dino_logic_t logic;
+    std::minstd_rand rand_engine;
+
+  public:
+    dino_page();
+    void update_ui() override;
+    void enter() override;
+    void leave() override;
+    void tick() override;
+    void on_encoder_changed(int32_t diff) override;
 };
+
+extern dino_page dino_page_instance;

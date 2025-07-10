@@ -36,23 +36,24 @@ static void scan_column_in_matrix(GPIO_TypeDef *row_port, uint16_t row_pin, bool
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "Simplify"
 #pragma ide diagnostic ignored "UnreachableCode"
-    if (KB_C1_GPIO_Port == KB_C2_GPIO_Port && KB_C2_GPIO_Port == KB_C3_GPIO_Port && KB_C3_GPIO_Port == KB_C4_GPIO_Port)
+    if (KEY_X0_GPIO_Port == KEY_X1_GPIO_Port && KEY_X1_GPIO_Port == KEY_X2_GPIO_Port &&
+        KEY_X2_GPIO_Port == KEY_X3_GPIO_Port)
     {
         // all columns are in the same port
         // read all pins at once
-        auto pins_state = READ_REG(KB_C1_GPIO_Port->IDR);
-        states[0] = !!(pins_state & KB_C1_Pin);
-        states[1] = !!(pins_state & KB_C2_Pin);
-        states[2] = !!(pins_state & KB_C3_Pin);
-        states[3] = !!(pins_state & KB_C4_Pin);
+        auto pins_state = READ_REG(KEY_X0_GPIO_Port->IDR);
+        states[0] = !!(pins_state & KEY_X0_Pin);
+        states[1] = !!(pins_state & KEY_X1_Pin);
+        states[2] = !!(pins_state & KEY_X2_Pin);
+        states[3] = !!(pins_state & KEY_X3_Pin);
     }
     else
     {
         // read pins one by one
-        states[0] = HAL_GPIO_ReadPin(KB_C1_GPIO_Port, KB_C1_Pin) == GPIO_PIN_SET;
-        states[1] = HAL_GPIO_ReadPin(KB_C2_GPIO_Port, KB_C2_Pin) == GPIO_PIN_SET;
-        states[2] = HAL_GPIO_ReadPin(KB_C3_GPIO_Port, KB_C3_Pin) == GPIO_PIN_SET;
-        states[3] = HAL_GPIO_ReadPin(KB_C4_GPIO_Port, KB_C4_Pin) == GPIO_PIN_SET;
+        states[0] = HAL_GPIO_ReadPin(KEY_X0_GPIO_Port, KEY_X0_Pin) == GPIO_PIN_SET;
+        states[1] = HAL_GPIO_ReadPin(KEY_X1_GPIO_Port, KEY_X1_Pin) == GPIO_PIN_SET;
+        states[2] = HAL_GPIO_ReadPin(KEY_X2_GPIO_Port, KEY_X2_Pin) == GPIO_PIN_SET;
+        states[3] = HAL_GPIO_ReadPin(KEY_X3_GPIO_Port, KEY_X3_Pin) == GPIO_PIN_SET;
     }
 #pragma clang diagnostic pop
 
@@ -61,18 +62,18 @@ static void scan_column_in_matrix(GPIO_TypeDef *row_port, uint16_t row_pin, bool
 
 static void scan_matrix(bool *states)
 {
-    scan_column_in_matrix(KB_R1_GPIO_Port, KB_R1_Pin, &states[0]);
-    scan_column_in_matrix(KB_R2_GPIO_Port, KB_R2_Pin, &states[4]);
-    scan_column_in_matrix(KB_R3_GPIO_Port, KB_R3_Pin, &states[8]);
-    scan_column_in_matrix(KB_R4_GPIO_Port, KB_R4_Pin, &states[12]);
+    scan_column_in_matrix(KEY_Y0_GPIO_Port, KEY_Y0_Pin, &states[0]);
+    scan_column_in_matrix(KEY_Y1_GPIO_Port, KEY_Y1_Pin, &states[4]);
+    scan_column_in_matrix(KEY_Y2_GPIO_Port, KEY_Y2_Pin, &states[8]);
+    scan_column_in_matrix(KEY_Y3_GPIO_Port, KEY_Y3_Pin, &states[12]);
 }
 
 static void get_key_raw_states(bool (&states)[KEY_COUNT])
 {
-    states[KEY_OK] = HAL_GPIO_ReadPin(KEY_OK_GPIO_Port, KEY_OK_Pin) == GPIO_PIN_RESET;
-    states[KEY_USER_1] = HAL_GPIO_ReadPin(KEY_USER_1_GPIO_Port, KEY_USER_1_Pin) == GPIO_PIN_RESET;
-    states[KEY_USER_2] = HAL_GPIO_ReadPin(KEY_USER_2_GPIO_Port, KEY_USER_2_Pin) == GPIO_PIN_RESET;
-    scan_matrix(&states[KEY_R1C1]);
+    states[KEY_OK] = HAL_GPIO_ReadPin(ENCODER_SW_GPIO_Port, ENCODER_SW_Pin) == GPIO_PIN_RESET;
+    states[USER_KEY_1] = HAL_GPIO_ReadPin(USER_KEY1_GPIO_Port, USER_KEY1_Pin) == GPIO_PIN_RESET;
+    states[USER_KEY_2] = HAL_GPIO_ReadPin(USER_KEY2_GPIO_Port, USER_KEY2_Pin) == GPIO_PIN_RESET;
+    scan_matrix(&states[KEY_X0Y0]);
 }
 
 // dispatcher

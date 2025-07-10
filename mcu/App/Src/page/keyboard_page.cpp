@@ -36,26 +36,27 @@ void keyboard_page::update_ui()
 
     u8g2_ClearBuffer(&screen);
     draw_keyboard_state(key_states[KEY_OK], 0, 0);
-    draw_keyboard_state(key_states[KEY_USER_1], 0, 16);
-    draw_keyboard_state(key_states[KEY_USER_2], 0, 32);
+    draw_keyboard_state(key_states[USER_KEY_1], 0, 16);
+    draw_keyboard_state(key_states[USER_KEY_2], 0, 32);
 
     u8g2_SetFont(&screen, u8g2_font_6x13_tf);
     u8g2_DrawStr(&screen, 18, 13, "OK");
-    u8g2_DrawStr(&screen, 18, 29, "User1");
-    u8g2_DrawStr(&screen, 18, 45, "User2");
-    u8g2_DrawStr(&screen, 1, 61, "Matrix");
+    u8g2_DrawStr(&screen, 18, 29, "Key1");
+    u8g2_DrawStr(&screen, 18, 45, "Key2");
+    u8g2_SetFont(&screen, u8g2_font_wqy12_t_gb2312_lite);
+    u8g2_DrawUTF8(&screen, 0, 61, "矩阵键盘");
 
     // Arrow -->
-    u8g2_DrawLine(&screen, 43, 57, 55, 57);
-    u8g2_DrawLine(&screen, 55, 57, 51, 53);
-    u8g2_DrawLine(&screen, 55, 57, 51, 61);
+    u8g2_DrawLine(&screen, 49, 57, 61, 57);
+    u8g2_DrawLine(&screen, 61, 57, 57, 53);
+    u8g2_DrawLine(&screen, 61, 57, 57, 61);
 
     auto offset_matrix_key = 64;
     for (int r = 0; r < 4; r++)
     {
         for (int c = 0; c < 4; c++)
         {
-            draw_keyboard_state(key_states[KEY_R1C1 + r * 4 + c], offset_matrix_key + c * 16, r * 16);
+            draw_keyboard_state(key_states[KEY_X0Y3 - r * 4 + c], offset_matrix_key + c * 16, r * 16);
         }
     }
 

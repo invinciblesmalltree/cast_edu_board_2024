@@ -16,8 +16,6 @@
 #include "buzzer.h"
 #include "encoder_reader.h"
 #include "gpio.h"
-#include "infrared_receiver.h"
-#include "infrared_transmitter.h"
 #include "oled.h"
 #include "page/main_menu_page.h"
 #include "page/page.h"
@@ -33,10 +31,12 @@ extern "C" void app_pre_init()
 {
     // do nothing
 }
+
 extern "C" void app_init()
 {
     // do nothing
 }
+
 extern "C" void app_sys_init()
 {
     // do nothing
@@ -82,9 +82,9 @@ extern "C" void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     {
         // provide a pulse source to the infrared transmitter
         // see also [infrared_transmitter_schedule_pulse]
-        infrared_transmitter_on_pulse();
+        // infrared_transmitter_on_pulse();
     }
-    else if (htim->Instance == TIM3)
+    else if (htim->Instance == TIM2)
     {
         breathing_light_update();
     }
@@ -94,7 +94,7 @@ extern "C" void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
     if (htim->Instance == TIM2)
     {
-        infrared_receiver_on_captured();
+        // infrared_receiver_on_captured();
     }
 }
 
@@ -103,15 +103,15 @@ extern "C" void app_main()
     oled_init();
 
     // Logo
-    u8g2_SetFont(&screen, u8g2_font_10x20_tf);
-    u8g2_DrawUTF8(&screen, 19, 40, "CAST 2023");
+    u8g2_SetFont(&screen, u8g2_font_wqy14_t_gb2312_lite);
+    u8g2_DrawUTF8(&screen, 8, 39, "欢迎来到通院科协");
     u8g2_SendBuffer(&screen);
 
     infrared_transmitter_pulse_init();
     buzzer_init();
     breathing_light_begin();
 
-    HAL_Delay(500);
+    HAL_Delay(750);
 
     route_to(&main_menu_page_instance);
     for (;;)

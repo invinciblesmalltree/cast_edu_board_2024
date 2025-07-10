@@ -23,28 +23,28 @@ using namespace snake;
 snake_page::snake_page()
 {
     // this->key_handlers[KEY_OK].on_pressed = [](key_state state) { route_to(&main_menu_page_instance); };
-    this->key_handlers[KEY_R3C2].on_pressed = [this](key_state state) {
+    this->key_handlers[KEY_X1Y1].on_pressed = [this](key_state state) {
         if (logic.is_valid_forward(direction_t::up))
         {
             logic.forward(direction_t::up);
             last_move_at = HAL_GetTick();
         }
     };
-    this->key_handlers[KEY_R4C2].on_pressed = [this](key_state state) {
+    this->key_handlers[KEY_X1Y0].on_pressed = [this](key_state state) {
         if (logic.is_valid_forward(direction_t::down))
         {
             logic.forward(direction_t::down);
             last_move_at = HAL_GetTick();
         }
     };
-    this->key_handlers[KEY_R4C1].on_pressed = [this](key_state state) {
+    this->key_handlers[KEY_X0Y0].on_pressed = [this](key_state state) {
         if (logic.is_valid_forward(direction_t::left))
         {
             logic.forward(direction_t::left);
             last_move_at = HAL_GetTick();
         }
     };
-    this->key_handlers[KEY_R4C3].on_pressed = [this](key_state state) {
+    this->key_handlers[KEY_X2Y0].on_pressed = [this](key_state state) {
         if (logic.is_valid_forward(direction_t::right))
         {
             logic.forward(direction_t::right);
@@ -52,6 +52,8 @@ snake_page::snake_page()
         }
     };
     this->key_handlers[KEY_OK].on_pressed = [this](key_state state) { logic.abort_game(); };
+    this->key_handlers[USER_KEY_1].on_pressed = [this](key_state state) { logic.abort_game(); };
+    this->key_handlers[USER_KEY_2].on_pressed = [this](key_state state) { logic.abort_game(); };
 }
 
 static void draw_cell(uint8_t x, uint8_t y, const cell_state_t &cell)

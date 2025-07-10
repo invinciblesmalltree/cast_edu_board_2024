@@ -13,15 +13,16 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "page/main_menu_page.h"
-#include "infrared_transmitter.h"
 #include "page/about_page.h"
-#include "page/buzzer_page.h"
-#include "page/infrared_page.h"
+#include "page/buzzer_menu_page.h"
+#include "page/game_menu_page.h"
 #include "page/keyboard_page.h"
-#include "page/snake_page.h"
+#include "page/laser_page.h"
+
 static void on_enter_buzzer()
 {
-    route_to(&buzzer_page_instance);
+    buzzer_menu_page_instance.focus_to_without_transition(0);
+    route_to(&buzzer_menu_page_instance);
 }
 
 static void on_enter_keyboard()
@@ -29,14 +30,15 @@ static void on_enter_keyboard()
     route_to(&keyboard_page_instance);
 }
 
-static void on_enter_infrared()
+static void on_enter_laser()
 {
-    route_to(&infrared_page_instance);
+    route_to(&laser_page_instance);
 }
 
-static void on_enter_snake()
+static void on_enter_game()
 {
-    route_to(&snake_page_instance);
+    game_menu_page_instance.focus_to_without_transition(0);
+    route_to(&game_menu_page_instance);
 }
 
 static void on_enter_about()
@@ -44,26 +46,27 @@ static void on_enter_about()
     route_to(&about_page_instance);
 }
 
-menu_item items[] = {
+static menu_item items[] = {
     {
-        .text = "Buzzer",
+        .text = "蜂鸣器",
         .on_enter = on_enter_buzzer,
     },
     {
-        .text = "Keyboard",
+        .text = "矩阵键盘",
         .on_enter = on_enter_keyboard,
     },
     {
-        .text = "Infrared",
-        .on_enter = on_enter_infrared,
+        .text = "激光测距",
+        .on_enter = on_enter_laser,
     },
     {
-        .text = "Game: Snake",
-        .on_enter = on_enter_snake,
+        .text = "游戏",
+        .on_enter = on_enter_game,
     },
     {
-        .text = "About",
+        .text = "关于",
         .on_enter = on_enter_about,
     },
 };
-menu_page main_menu_page_instance("[CAST EDU BOARD 2023]", items, sizeof(items) / sizeof(items[0]));
+
+menu_page main_menu_page_instance("[ CAST 学习板 2024 ]", items, sizeof(items) / sizeof(items[0]));

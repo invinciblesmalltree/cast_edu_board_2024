@@ -30,10 +30,10 @@ static uint8_t u8x8_stm32_gpio_and_delay(U8X8_UNUSED u8x8_t *u8x8, U8X8_UNUSED u
         HAL_Delay(arg_int);
         break;
     case U8X8_MSG_GPIO_DC:
-        HAL_GPIO_WritePin(OLED_DATA_CMD_GPIO_Port, OLED_DATA_CMD_Pin, arg_int);
+        HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, arg_int);
         break;
     case U8X8_MSG_GPIO_RESET:
-        HAL_GPIO_WritePin(OLED_RESET_GPIO_Port, OLED_RESET_Pin, arg_int);
+        HAL_GPIO_WritePin(OLED_RES_GPIO_Port, OLED_RES_Pin, arg_int);
         break;
     default:
         break;
@@ -51,7 +51,7 @@ static uint8_t u8x8_byte_4wire_hw_spi(U8X8_UNUSED u8x8_t *u8x8, uint8_t msg, uin
     case U8X8_MSG_BYTE_INIT:
         break;
     case U8X8_MSG_BYTE_SET_DC:
-        HAL_GPIO_WritePin(OLED_DATA_CMD_GPIO_Port, OLED_DATA_CMD_Pin, arg_int);
+        HAL_GPIO_WritePin(OLED_DC_GPIO_Port, OLED_DC_Pin, arg_int);
         break;
     case U8X8_MSG_BYTE_START_TRANSFER:
     case U8X8_MSG_BYTE_END_TRANSFER:

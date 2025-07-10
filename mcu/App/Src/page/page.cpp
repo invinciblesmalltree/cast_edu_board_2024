@@ -14,6 +14,7 @@
 
 #include "page/page.h"
 page *current_page;
+
 void route_to(page *new_page)
 {
     if (current_page != nullptr)
@@ -38,6 +39,7 @@ void page::leave()
 {
     // do nothing by default
 }
+
 void page::tick()
 {
     // do nothing by default

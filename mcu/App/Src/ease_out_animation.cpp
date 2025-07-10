@@ -13,9 +13,11 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "ease_out_animation.h"
+
 ease_out_animation::ease_out_animation(float init_value) : animation(init_value)
 {
 }
+
 float ease_out_animation::map(float t)
 {
     return 1 - (1 - t) * (1 - t);

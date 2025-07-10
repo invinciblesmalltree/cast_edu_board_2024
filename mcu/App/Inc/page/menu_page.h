@@ -39,12 +39,13 @@ class menu_page : public page
     uint16_t header_height;
     uint16_t item_height;
     float item_lines;
-    void ensure_visible(size_t target_index);
+    void ensure_visible(size_t target_index, bool transition = true);
 
   public:
-    menu_page(const char *title, menu_item *items, size_t item_count);
+    menu_page(const char *title, menu_item *items, size_t item_count, page *parent = nullptr);
     void focus_with_increment(int increment);
     void focus_to(size_t target_index);
+    void focus_to_without_transition(size_t target_index);
     void update_ui() override;
     void enter() override;
     void leave() override;

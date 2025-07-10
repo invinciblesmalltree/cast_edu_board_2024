@@ -13,8 +13,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
-#include <cstddef>
 #include <cstdint>
-const constexpr uint16_t about_bottom_banner_width = 128;
-const constexpr uint16_t about_bottom_banner_height = 31;
-extern const unsigned char about_bottom_banner[496];
+constexpr uint16_t about_bottom_banner_width = 64;
+constexpr uint16_t about_bottom_banner_height = 54;
+extern const unsigned char about_bottom_banner[];

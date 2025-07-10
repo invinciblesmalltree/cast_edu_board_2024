@@ -17,17 +17,14 @@
 #include "tim.h"
 #include <cstdint>
 
-constexpr TIM_HandleTypeDef *led_controller = &htim3;
+constexpr TIM_HandleTypeDef *led_controller = &htim2;
 constexpr uint32_t channel_red = TIM_CHANNEL_1;
 constexpr uint32_t channel_green = TIM_CHANNEL_3;
 constexpr uint32_t channel_blue = TIM_CHANNEL_4;
 
 // format: 0x00RRGGBB
 static uint32_t color_list[] = {
-    0x00500000,
-    0x00005000,
-    0x000000FF,
-    0x004B0082,
+    0x00500000, 0x00005000, 0x00000050, 0x00505000, 0x00500050, 0x00005050, 0x00505050,
 };
 constexpr uint32_t color_length = sizeof(color_list) / sizeof(color_list[0]);
 
@@ -62,9 +59,9 @@ void breathing_light_update()
         color_index = (color_index + 1) % color_length;
     }
 
-    auto r = ((color_list[color_index] >> 16) & 0xFF) * duty[duty_index] / 255;
-    auto g = ((color_list[color_index] >> 8) & 0xFF) * duty[duty_index] / 255;
-    auto b = ((color_list[color_index]) & 0xFF) * duty[duty_index] / 255;
+    auto r = (color_list[color_index] >> 16 & 0xFF) * duty[duty_index] / 255;
+    auto g = (color_list[color_index] >> 8 & 0xFF) * duty[duty_index] / 255;
+    auto b = (color_list[color_index] & 0xFF) * duty[duty_index] / 255;
 
     __HAL_TIM_SET_COMPARE(led_controller, channel_red, r);
     __HAL_TIM_SET_COMPARE(led_controller, channel_green, g);

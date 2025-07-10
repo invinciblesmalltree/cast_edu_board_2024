@@ -13,100 +13,21 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "page/buzzer_page.h"
+#include "assert/songs.h"
 #include "buzzer.h"
 #include "oled.h"
-#include "page/main_menu_page.h"
+#include "page/buzzer_menu_page.h"
 buzzer_page buzzer_page_instance;
-
-static tone_info test_tones[] = {
-    // 我可以跟在你身后
-    {784, 500},
-    {880, 500},
-    {988, 500},
-    {1175, 500},
-    {1046, 250},
-    {659, 750},
-    {784, 500},
-    {784, 250},
-    // 像影子追着光梦游
-    {0, 500},
-    {880, 500},
-    {578, 500},
-    {523, 500},
-    {578, 500},
-    {523, 250},
-    {578, 500},
-    {784, 500},
-    {659, 250},
-    // 我可以等在这路口
-    {0, 500},
-    {784, 500},
-    {880, 500},
-    {988, 500},
-    {1175, 500},
-    {1046, 250},
-    {659, 750},
-    {784, 500},
-    {784, 250},
-    // 不管你会不会经过
-    {0, 500},
-    {880, 500},
-    {659, 500},
-    {523, 500},
-    {578, 500},
-    {523, 250},
-    {494, 500},
-    {523, 500},
-    {523, 250},
-    // 每当我为你抬起头
-    {0, 500},
-    {784, 500},
-    {880, 500},
-    {988, 500},
-    {1175, 500},
-    {1046, 250},
-    {659, 750},
-    {784, 500},
-    {784, 250},
-    // 连眼泪都觉得自由
-    {0, 500},
-    {880, 500},
-    {659, 500},
-    {523, 500},
-    {578, 500},
-    {523, 250},
-    {578, 500},
-    {784, 500},
-    {659, 250},
-    // 有的爱像阳光倾落
-    {0, 500},
-    {784, 500},
-    {880, 500},
-    {988, 500},
-    {1175, 500},
-    {1046, 250},
-    {659, 500},
-    {880, 500},
-    {880, 750},
-    // 边拥有边失去着
-    {659, 250},
-    {784, 750},
-    {784, 1500},
-    {0, 500},
-    {698, 500},
-    {659, 250},
-    {578, 250},
-    {523, 500},
-};
 
 void buzzer_page::update_ui()
 {
     u8g2_ClearBuffer(&screen);
-    u8g2_SetFont(&screen, u8g2_font_7x14_tf);
-    u8g2_DrawStr(&screen, 26, 14, "Buzzer test");
-    u8g2_SetFont(&screen, u8g2_font_6x10_tf);
-    u8g2_DrawStr(&screen, 18, 37, "Press OK to play");
-    u8g2_DrawStr(&screen, 18, 51, "Rotate to return");
+    u8g2_SetFont(&screen, u8g2_font_wqy14_t_gb2312_lite);
+    uint8_t start_x = u8g2_GetUTF8Width(&screen, songs[this->song_id].name);
+    u8g2_DrawUTF8(&screen, u8g2_GetDisplayWidth(&screen) - start_x >> 1, 14, songs[this->song_id].name);
+    u8g2_SetFont(&screen, u8g2_font_wqy12_t_gb2312_lite);
+    u8g2_DrawUTF8(&screen, 14, 37, "按下 OK 开始播放");
+    u8g2_DrawUTF8(&screen, 14, 51, "旋转以退出");
     u8g2_SendBuffer(&screen);
 }
 
@@ -121,15 +42,20 @@ void buzzer_page::leave()
 
 buzzer_page::buzzer_page()
 {
-    this->key_handlers[KEY_OK].on_pressed = [](key_state) {
-        buzzer_start_play(test_tones, sizeof(test_tones) / sizeof(tone_info));
+    this->key_handlers[KEY_OK].on_pressed = [this](key_state) {
+        buzzer_start_play(songs[this->song_id].tones, songs[this->song_id].tone_count);
     };
-    this->key_handlers[KEY_USER_1].on_pressed = [](key_state) {
-        buzzer_start_play(test_tones, sizeof(test_tones) / sizeof(tone_info));
+    this->key_handlers[KEY_X0Y0].on_pressed = [](key_state) { route_to(&buzzer_menu_page_instance); };
+    this->key_handlers[KEY_X2Y0].on_pressed = [this](key_state) {
+        buzzer_start_play(songs[this->song_id].tones, songs[this->song_id].tone_count);
     };
-    this->key_handlers[KEY_USER_2].on_pressed = [](key_state) { route_to(&main_menu_page_instance); };
+    this->key_handlers[USER_KEY_1].on_pressed = [](key_state) { route_to(&buzzer_menu_page_instance); };
+    this->key_handlers[USER_KEY_2].on_pressed = [this](key_state) {
+        buzzer_start_play(songs[this->song_id].tones, songs[this->song_id].tone_count);
+    };
 }
+
 void buzzer_page::on_encoder_changed(int32_t diff)
 {
-    route_to(&main_menu_page_instance);
+    route_to(&buzzer_menu_page_instance);
 }

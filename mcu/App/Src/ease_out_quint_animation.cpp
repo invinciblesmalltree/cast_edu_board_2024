@@ -12,23 +12,14 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#pragma once
-#include <cstdint>
-/**
- * @brief Schedule a pulse to be sent (via infrared_transmitter_on_pulse) after the given delay
- * @param us
- */
-extern void infrared_transmitter_schedule_pulse(uint16_t us);
-/**
- * @brief Send a pulse to infrared module
- * @see infrared_transmitter_schedule_pulse(uint16_t us)
- */
-void infrared_transmitter_on_pulse();
-/**
- * @brief Send data via infrared module
- * @param pattern The pattern to send, in us.
- * @param pattern_length The length of the pattern.
- */
-void infrared_transmit(uint32_t carrier_freq, uint16_t *pattern, uint32_t pattern_length);
-void infrared_transmit_nec_command(uint8_t addr, uint8_t data);
-void infrared_transmit_nec_repeat();
+#include "ease_out_quint_animation.h"
+#include <valarray>
+
+ease_out_quint_animation::ease_out_quint_animation(float init_value) : animation(init_value)
+{
+}
+
+float ease_out_quint_animation::map(float t)
+{
+    return 1.f - std::pow(1.f - t, 5.f);
+}

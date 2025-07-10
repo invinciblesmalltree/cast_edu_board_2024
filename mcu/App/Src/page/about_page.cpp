@@ -18,12 +18,22 @@
 #include "page/main_menu_page.h"
 #include <cmath>
 about_page about_page_instance;
+
 about_page::about_page()
 {
-    for (auto &key_handler : this->key_handlers)
-    {
-        key_handler.on_pressed = [this](key_state) { route_to(&main_menu_page_instance); };
-    }
+    // for (auto &key_handler: this->key_handlers) {
+    //     key_handler.on_pressed = [this](key_state) {
+    //         route_to(&main_menu_page_instance);
+    //     };
+    // }
+
+    this->key_handlers[KEY_OK].on_pressed = [this](key_state) { route_to(&main_menu_page_instance); };
+    this->key_handlers[KEY_X1Y1].on_pressed = [this](key_state) { this->on_encoder_changed(-4); };
+    this->key_handlers[KEY_X1Y0].on_pressed = [this](key_state) { this->on_encoder_changed(4); };
+    this->key_handlers[KEY_X0Y0].on_pressed = [this](key_state) { route_to(&main_menu_page_instance); };
+    this->key_handlers[KEY_X2Y0].on_pressed = [this](key_state) { this->scroll_to_top(); };
+    this->key_handlers[USER_KEY_1].on_pressed = [this](key_state) { route_to(&main_menu_page_instance); };
+    this->key_handlers[USER_KEY_2].on_pressed = [this](key_state) { this->scroll_to_top(); };
 }
 
 void about_page::update_ui()
@@ -35,25 +45,27 @@ void about_page::update_ui()
         {
             top_y.transition(0, 250);
         }
-        else if (y > 155)
+        else if (y > 175)
         {
-            top_y.transition(155, 250);
+            top_y.transition(175, 250);
         }
     }
     u8g2_ClearBuffer(&screen);
-    u8g2_SetFont(&screen, u8g2_font_7x14_tf);
-    static const char *lines[] = {"Authors:",        "  Hardware:",       "    @CancerBocchi", "    @Fei Zhao",
-                                  "    @Qiuyang Xu", "  Firmware:",       "    @alampy.com",   "    @Shujian Yu",
-                                  "Version:",        "  CEB-23-H2.1-F1.1"};
-    constexpr auto n_lines = sizeof(lines) / sizeof(lines[0]);
-    u8g2_DrawStr(&screen, 46, 14 - y, "About");
+    u8g2_SetFont(&screen, u8g2_font_wqy14_t_gb2312_lite);
+    static const char *lines[] = {
+        "作者:",          "    硬件:  王冕",     "    固件:",    "        极地萤火", "            @alampy",
+        "        束洋帆", "            @insmtr", "        李亮", "        曾长治",   "版本:",
+        "    v2024.10.19"};
+    constexpr auto n_lines = std::size(lines);
+    u8g2_DrawUTF8(&screen, 46, 14 - y, "关于");
 
     for (int i = 0; i < n_lines; i++)
     {
-        u8g2_DrawStr(&screen, 0, 28 + i * 14 - y, lines[i]);
+        u8g2_DrawUTF8(&screen, 0, 28 + i * 14 - y, lines[i]);
     }
 
-    u8g2_DrawXBM(&screen, 0, 170 - y, about_bottom_banner_width, about_bottom_banner_height, about_bottom_banner);
+    u8g2_DrawXBM(&screen, u8g2_GetDisplayWidth(&screen) - about_bottom_banner_width >> 1, 180 - y,
+                 about_bottom_banner_width, about_bottom_banner_height, about_bottom_banner);
 
     u8g2_SendBuffer(&screen);
 
@@ -67,6 +79,11 @@ void about_page::enter()
 
 void about_page::leave()
 {
+}
+
+void about_page::scroll_to_top()
+{
+    top_y.transition(-16, 520);
 }
 
 void about_page::on_encoder_changed(int32_t diff)

@@ -13,6 +13,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
+#include "menu_page.h"
 #include "page.h"
 class buzzer_page : public page
 {
@@ -22,5 +23,6 @@ class buzzer_page : public page
     void enter() override;
     void leave() override;
     void on_encoder_changed(int32_t diff) override;
+    int song_id = 0;
 };
 extern buzzer_page buzzer_page_instance;

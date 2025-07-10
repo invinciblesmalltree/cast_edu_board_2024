@@ -16,27 +16,28 @@
 
 #include "event_handler.h"
 #include <cstdint>
+
 enum key_code_t
 {
     KEY_OK = 0,
-    KEY_USER_1,
-    KEY_USER_2,
-    KEY_R1C1,
-    KEY_R1C2,
-    KEY_R1C3,
-    KEY_R1C4,
-    KEY_R2C1,
-    KEY_R2C2,
-    KEY_R2C3,
-    KEY_R2C4,
-    KEY_R3C1,
-    KEY_R3C2,
-    KEY_R3C3,
-    KEY_R3C4,
-    KEY_R4C1,
-    KEY_R4C2,
-    KEY_R4C3,
-    KEY_R4C4,
+    USER_KEY_1,
+    USER_KEY_2,
+    KEY_X0Y0,
+    KEY_X1Y0,
+    KEY_X2Y0,
+    KEY_X3Y0,
+    KEY_X0Y1,
+    KEY_X1Y1,
+    KEY_X2Y1,
+    KEY_X3Y1,
+    KEY_X0Y2,
+    KEY_X1Y2,
+    KEY_X2Y2,
+    KEY_X3Y2,
+    KEY_X0Y3,
+    KEY_X1Y3,
+    KEY_X2Y3,
+    KEY_X3Y3,
     KEY_COUNT,
 };
 
